@@ -5,12 +5,27 @@ class Profile extends HTMLElement {
     const shadowRoot = this.attachShadow({
       mode: 'open',
     });
-    shadowRoot.innerHTML = this.template;
+
+    const tree = this.template;
+    const {
+      'is-regular': { value: isRegular },
+      name: { value: name },
+      photo: { value: photo },
+    } = this.attributes;
+
+    const containerStyle = `background-color: ${!!isRegular ? 'red' : 'white'};`;
+    shadowRoot.innerHTML = tree
+      .replace('$containerStyle', containerStyle)
+      .replace('$name', name)
+      .replace('$photo', photo);
   }
 
   get template() {
     return `
-      <p>This is a custom element!</p>
+      <div style="$containerStyle">
+        <span>$name</span>
+        <img src="$photo" />
+      </div>
     `;
   }
 
