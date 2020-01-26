@@ -5,15 +5,6 @@ class Profile extends HTMLElement {
     const shadowRoot = this.attachShadow({
       mode: 'open',
     });
-    shadowRoot.innerHTML = this.template;
-  }
-
-  get template() {
-    return `
-      <div>
-        <span />
-      </div>
-    `;
   }
 
   connectedCallback() {
@@ -23,15 +14,18 @@ class Profile extends HTMLElement {
       photo: { value: photo },
     } = this.attributes;
 
-    const containerStyle = `background-color: ${!!isRegular ? 'red' : 'white'};`;
-    const container = this.shadowRoot.querySelector('div');
-    container.style = containerStyle;
+    const container = document.createElement('div');
+    container.style.backgroundColor = !!isRegular ? 'red' : 'white';
 
-    container.querySelector('span').innerText = name;
+    const span = document.createElement('span');
+    span.appendChild(document.createTextNode(name));
+    container.appendChild(span);
 
     const img = document.createElement('img');
-    img.setAttribute('src', photo);
+    img.src = photo;
     container.appendChild(img);
+
+    this.shadowRoot.appendChild(container);
   }
 }
 
