@@ -5,8 +5,18 @@ class Profile extends HTMLElement {
     const shadowRoot = this.attachShadow({
       mode: 'open',
     });
+    shadowRoot.innerHTML = this.template;
+  }
 
-    const tree = this.template;
+  get template() {
+    return `
+      <div>
+        <span />
+      </div>
+    `;
+  }
+
+  connectedCallback() {
     const {
       'is-regular': { value: isRegular },
       name: { value: name },
@@ -14,32 +24,14 @@ class Profile extends HTMLElement {
     } = this.attributes;
 
     const containerStyle = `background-color: ${!!isRegular ? 'red' : 'white'};`;
-    shadowRoot.innerHTML = tree
-      .replace('$containerStyle', containerStyle)
-      .replace('$name', name)
-      .replace('$photo', photo);
-  }
+    const container = this.shadowRoot.querySelector('div');
+    container.style = containerStyle;
 
-  get template() {
-    return `
-      <div style="$containerStyle">
-        <span>$name</span>
-        <img src="$photo" />
-      </div>
-    `;
-  }
+    container.querySelector('span').innerText = name;
 
-  connectedCallback() {
-    console.log('connectedCallback');
-  }
-  disconnectedCallback() {
-    console.log('disconnectedCallback');
-  }
-  adoptedCallback() {
-    console.log('adoptedCallback');
-  }
-  attributeChangedCallback(name, oldValue, newValue) {
-    console.log('attributeChangedCallback:', name, oldValue, newValue);
+    const img = document.createElement('img');
+    img.setAttribute('src', photo);
+    container.appendChild(img);
   }
 }
 
