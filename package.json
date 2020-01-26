@@ -8,6 +8,7 @@
     "start": "http-server"
   },
   "devDependencies": {
-    "http-server": "0.12.1"
+    "http-server": "0.12.1",
+    "prettier": "1.19.1"
   }
 }
